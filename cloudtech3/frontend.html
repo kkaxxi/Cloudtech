@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Ollama Chat UI</title>
+</head>
+<body>
+  <h2>Chat with LLM (Ollama)</h2>
+  <textarea id="prompt" rows="5" cols="50" placeholder="Enter your prompt here..."></textarea><br>
+  <button onclick="sendPrompt()">Send</button>
+
+  <pre id="response"></pre>
+
+  <script>
+    async function sendPrompt() {
+      const prompt = document.getElementById("prompt").value;
+      const resBox = document.getElementById("response");
+
+      const response = await fetch("http://localhost:11434/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "phi3:mini",  // або llama2, якщо ти її використовуєш
+          prompt: prompt,
+          stream: false
+        })
+      });
+
+      const result = await response.json();
+      resBox.innerText = result.response || "No response.";
+    }
+  </script>
+</body>
+</html>
